@@ -1,0 +1,102 @@
+use shuyin;
+CREATE TABLE user
+(
+ID VARCHAR(8) PRIMARY KEY,
+username VARCHAR(20) NOT NULL,
+password CHAR(20),
+personalsignature VARCHAR(100)
+);
+drop table book;          
+CREATE TABLE book
+(
+bookID BIGINT NOT NULL AUTO_INCREMENT,
+Introduction VARCHAR(100) NOT NULL,
+author VARCHAR(20) NOT NULL,
+bookname VARCHAR(20) NOT NULL,
+ PRIMARY KEY (bookID)
+); 
+drop table chapter;
+alter table shuyin.chapter
+drop COLUMN contentofchapter;
+alter table shuyin.chapter
+ADD COLUMN  content TEXT NOT NULL;
+CREATE TABLE chapter
+(
+ID BIGINT NOT NULL AUTO_INCREMENT,
+bookID bigint,
+content VARCHAR(50) NOT NULL UNIQUE,
+cname VARCHAR(50) NOT NULL,
+primary key(ID),
+FOREIGN KEY(bookID) REFERENCES book(bookID));
+drop table audio;
+CREATE TABLE audio
+(
+ID BIGINT NOT NULL AUTO_INCREMENT,
+userID VARCHAR(8),
+chapterID BIGINT,
+FOREIGN KEY(userID) REFERENCES user(ID),
+FOREIGN KEY(chapterID) REFERENCES chapter(ID),
+content VARCHAR(50) NOT NULL UNIQUE, 
+time TIMESTAMP NOT NULL,
+primary key(ID));
+drop table ccomment;
+CREATE TABLE ccomment
+(
+ID BIGINT NOT NULL AUTO_INCREMENT,
+userID VARCHAR(8),
+chapterID BIGINT,
+FOREIGN KEY(userID) REFERENCES user(ID),
+FOREIGN KEY(chapterID) REFERENCES chapter(ID),
+content VARCHAR(100) NOT NULL,
+time TIMESTAMP NOT NULL,
+primary key(ID)
+) ;
+
+CREATE TABLE admonistrators
+(
+ID VARCHAR(8) PRIMARY KEY,
+Username VARCHAR(20) NOT NULL,
+Password VARCHAR(20) NOT NULL
+) ;          
+drop table audiothumbsup;
+CREATE TABLE audioThumbsup
+(
+Thumbsup BIGINT NOT NULL AUTO_INCREMENT,
+userID VARCHAR(8),
+worksID BIGINT,
+FOREIGN KEY(userID) REFERENCES user(ID),
+FOREIGN KEY(worksID) REFERENCES audio(ID),
+primary key(Thumbsup)
+) ;
+
+drop table chapterthumbs_up;
+CREATE TABLE chapterThumbs_up
+(
+Thumbs_up BIGINT NOT NULL AUTO_INCREMENT,
+userID VARCHAR(8),
+chapterID BIGINT,
+FOREIGN KEY(userID) REFERENCES user(ID),
+FOREIGN KEY(chapterID) REFERENCES chapter(ID),
+primary key(Thumbs_up)
+);
+drop table feedback;
+CREATE TABLE feedback
+(
+ID BIGINT NOT NULL AUTO_INCREMENT,
+UserID VARCHAR(8),
+AudioID BIGINT,
+Content VARCHAR(100) NOT NULL,
+FOREIGN KEY(userID) REFERENCES user(ID),
+FOREIGN KEY(AudioID) REFERENCES audio(ID),
+State INT NOT NULL,
+primary key(ID)
+);
+drop table acomment;
+CREATE TABLE acomment
+(
+ID BIGINT NOT NULL AUTO_INCREMENT,
+UserID VARCHAR(8),
+AudioID BIGINT,
+FOREIGN KEY(AudioID) REFERENCES audio(ID),
+Content VARCHAR(100) NOT NULL,
+primary key(ID));

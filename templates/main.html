@@ -1,0 +1,78 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>书音</title>
+    <link rel="stylesheet" type="text/css" href="{%  static 'css/main.css' %}">
+</head>
+<body>
+<div class="mainall" style="float:left;">
+    <div id="container" name="headertop" style="height: 120px;">
+        <div id="pic" style="height:100px;width:400px;float:left;">
+            <img src="{%  static 'img/shuyin.png' %}" width=400px height=200px />
+        </div>
+        <div id="content" style="height:100px;width:450px;float:left;">
+            <form method="post" action="">
+
+            {% csrf_token %}
+                <input type="text" class="search" name="search" value="" size="50" style="height:50px;float:left;" placeholder="搜索海量图书" />
+                <button type="submit" ><img src="{%  static 'img/search.jpg' %}" width=50px height=50px /></button>
+            </form>
+        </div>
+<a href="personal"><img src="{%  static 'img/login.png' %}" width=80px height=80px> </a>
+
+        </div>
+    </div>
+
+    <div id="container" name="content" style="height: 600px ">
+
+        <div id="newbook" style="height: 600px;width: 1400px;float:left;">
+            <div class="dowebok1" style="width: 700px;height: 600px;float:left;">
+                <div style="color:#FFF">
+                最热书籍排行榜
+                </div>
+                <div>
+                    <table border="2" style="width: 500px">
+                        <tr>
+                            <th>书名</th>
+                            <th>作者</th>
+                            <th>书籍简介</th>
+                        </tr>
+                    {% for book in booksSort %}
+                    <tr style="height: 50px">
+                        <td><a href="book?bid={{ book.4 }}">{{ book.1 }}</a></td>
+                        <td>{{ book.2 }}</td>
+                        <td>{{ book.3 }}</td>
+                    </tr>
+                    {% endfor %}
+                    </table>
+                </div>
+            </div>
+            <div class="dowebok2" style="width: 700px;height: 600px;float:left;">
+                <div style="color:#FFF">
+                最热配音章节排行榜
+                </div>
+                    <table border="2" style="width: 500px">
+                        <tr>
+                            <th>书名</th>
+                            <th>章节名</th>
+                            <th>作者</th>
+                            <th>书籍简介</th>
+                        </tr>
+                    {% for book in audiosSort %}
+                    <tr style="height: 50px">
+                        <td>{ book.1 }}</td>
+                        <td><a href="chapter?chapterId={{ book.5 }}&uid={{ uid }}&uid={{ uid }}">{{ book.2 }}</a></td>
+                        <td>{{ book.3 }}</td>
+                        <td>{{ book.4 }}</td>
+                    </tr>
+                    {% endfor %}
+                    </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

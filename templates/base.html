@@ -1,0 +1,122 @@
+{% load static %}
+
+<html lang="en">
+<head>
+<title>书音 </title>
+    <style>
+#header {
+    background-color:deepskyblue;
+    color:white;
+    text-align:center;
+    padding:5px;
+}
+#nav {
+    line-height:30px;
+    background-color:lightgray;
+    height:500px;
+    width:20%;
+    float:left;
+    padding:5px;
+}
+
+#section {
+    width:50%;
+    float:left;
+    padding:20px;
+}
+#section1 {
+    width:70%;
+    float:left;
+    padding:20px;
+}
+#section2 {
+    width: 30%;
+    float: left;
+    padding: 20px;
+    text-align: left;
+}
+#footer {
+    background-color:black;
+    color:white;
+    clear:both;
+    text-align:center;
+    padding:5px;
+}
+input[type=text], select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+input[type=submit] {
+  width: 30%;
+  background-color: deepskyblue;
+  color: white;
+  padding: 4px 2px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.p1{
+overflow: hidden;
+text-overflow: ellipsis;
+display: -webkit-box;
+-webkit-line-clamp: 3;
+-webkit-box-orient: vertical;
+}
+        *{ margin: 0; padding:0;}
+        body{-webkit-tap-highlight-color: rgba(0,0,0,0); font-family: "微软雅黑"}
+        h1{ width: 100%; font-size: 1.5em; text-align: center; line-height: 3em; color:#47c9af; }
+        #audio{ width: 100%;}
+        #control{ width: 150px; height: 150px; line-height: 150px; text-align: center; border-radius: 200px; border:none; color:#fff; margin-top: -75px; margin-left:-75px; left:50%; top:50%; position: absolute; box-shadow: #888 0 0 8px;}
+        .color_gray{ background: #e4e4e4}
+        .hide{ display: none;}
+        .show{ display: block;}
+        .play{ background:  #f06060;}
+        .pause{ background:skyblue}
+        /*进度条样式*/
+        .progressBar{ width: 100%; height: 10px;margin: 30px auto 30px auto; position:absolute; left: 0; bottom: 35px;}
+        .progressBar div{ position: absolute;}
+        .progressBar .progressBac{ width: 100%; height: 10px;  left: 0; top:0; background: #e4e4e4;}
+        .progressBar .speed{width: 100%; height: 10px; left: -100%; background: #f06060; }
+        .progressBar .drag{ width: 30px; height: 30px; left: 0; top:-10px;  background: skyblue; opacity: 0.8; border-radius: 50px; box-shadow: #fff 0 0 5px;}
+        /*时间样式*/
+        #time{ width: 100%; height: 20px;position: absolute; left: 0; bottom:30px; color:#888;}
+        .tiemDetail{ position: absolute; right:10px; top:0;}
+        #songInfo{overflow: hidden; width: 200px; height:50px; line-height: 50px; text-align: center; color:#34495e;   margin-top: -25px; margin-left:-100px; left:50%; top:70%; position: absolute;}
+        .shareImg{ position: absolute; left: 100000px;}
+    </style>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+</head>
+    {% if messages %}
+        <script>
+            {% for msg in messages %}
+                alert('{{ msg.message }}');
+            {% endfor %}
+        </script>
+    {% endif %}
+<body>
+ <!-- Page content of course! -->
+<main class="container-fluid">
+<div class="container">
+
+ {% block content %} {% endblock %}
+
+</div>
+</main>
+
+
+{% block js %} {% endblock %}
+<footer>
+Copyright 书音
+</footer>
+</body>
+</html>

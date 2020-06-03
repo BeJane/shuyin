@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div id="header">
+<h3>书名: {{bookname}}</h3>
+
+    <p>作者:{{bookauthor}}</p>
+</div>
+<div id="nav">
+    <h4>简介:</h4>
+    <p>{{bookintroduction}}</p>
+</div>
+    <div id="section1">
+
+   <table>
+        <tr>
+            <h4>章节</h4>
+        </tr>
+        {% for c in chapter %}
+            <tr style="height: 50px">
+                <td><a href="chapter?chapterId={{ c.id }}&uid={{ uid }}">{{ c.cname }}</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+
+
+    </div>
+{% endblock %}

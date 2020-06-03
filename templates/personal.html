@@ -1,0 +1,73 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>书音</title>
+    <link rel="stylesheet" type="text/css" href="{%  static 'css/personal.css' %}">
+</head>
+<body>
+<div id="container">
+<br>
+    <div class="pic" style="float:left;height: 600px">
+        <img src="{%  static 'img/login.png' %}" width=150px height=150px>
+    </div>
+    <div class="content" style="float: left">
+        <form action="personal" method="post">
+            {% csrf_token %}
+            <div>用 户 名 : <input type="text" name="username" value="{{ username }}"  size="20" style="height:20px;" /></div>
+            <div>个性签名: <input type="text" name="personalsignature" value="{{ personalsignature }}"  size="20" style="height:20px;" /></div>
+
+            <div>已发布配音作品: </div>
+                <table border="2" style="width: 500px">
+                        <tr>
+                            <th>书名</th>
+                            <th>章节名</th>
+                        </tr>
+                    {% for p in publish %}
+                    <tr style="height: 30px">
+                        <td>{{ p.0 }}</td>
+                        <td>{{ p.1 }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            <div>点赞的阅读作品:</div>
+            <div>
+                <table border="2" style="width: 500px">
+                        <tr>
+                            <th>书名</th>
+                            <th>章节名</th>
+                        </tr>
+                    {% for c in chapter %}
+                    <tr style="height: 30px">
+                        <td>{{ c.0 }}</td>
+                        <td>{{ c.1 }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div>点赞的配音作品</div>
+            <div>
+                <table border="2" style="width: 500px">
+                        <tr>
+                            <th>书名</th>
+                            <th>章节名</th>
+                        </tr>
+                    {% for a in audio %}
+                    <tr style="height: 30px">
+                        <td>{{ a.0 }}</td>
+                        <td>{{ a.1 }}</td>
+                    </tr>
+                    {% endfor %}
+                    </table>
+            </div>
+
+           <button id="submit">确定修改</button>
+
+    </form>
+            <div><a href="login">退出登陆</a></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

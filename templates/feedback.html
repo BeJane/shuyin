@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div id="header">
+<h3>{{ chapter.cname }}</h3>
+    &nbsp&nbsp&nbsp&nbsp&nbsp
+    <p>点赞量{{ max }}&nbsp {{ state }}</p>
+</div>
+<div align="center" >
+
+    <br>
+    <br>
+    <table border="1" id="mytable">
+        <thead>
+        <th>ID</th>
+        <th>章节内容</th>
+        <th>举报理由</th>
+        <th>状态</th>
+        <th>操作</th>
+        </thead>
+
+        <tbody>
+
+         {% for feedback in feedbacks %}
+            <tr>
+                <td>{{ feedback.id }}</td>
+                <td><p class="p1">{{ feedback.audioid.chapterid.content}}</p></td>
+                <td>{{ feedback.content }}</td>
+                <td>{{ feedback.state }}</td>
+
+                <td><a href="deleteAudio?delete_sid={{ feedback.audioid }}">删除</a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div style="margin-right:15px">共{{ count }}条记录</div>
+
+</div>
+</div>
+
+{% endblock %}

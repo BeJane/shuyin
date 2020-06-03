@@ -1,0 +1,32 @@
+{%  load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>书音</title>
+    <link rel="stylesheet" type="text/css" href="{%  static 'css/login.css' %}">
+</head>
+<body>
+    <div class="dowebok">
+        <div class="logo"></div>
+
+        <form action="" method="post">
+            {% csrf_token %}
+        <div class="form-item">
+            <input id="username" name="username" type="text" autocomplete="off" placeholder="请输入用户名"  onfocus="this.placeholder= ' '" onblur="this.placeholder='用户名'">
+            <div>{{ massage }}</div>
+            <p class="tip">massage</p>
+        </div>
+        <div class="form-item">
+            <input id="password" name="password" type="password" autocomplete="off" placeholder="请输入密码" onfocus="this.placeholder= ' '" onblur="this.placeholder='登陆密码'">
+        </div>
+        <div class="form-item"><button id="submit">注 册</button></div>
+        </form>
+        <div class="reg-bar">
+            <a class="reg" href="login">登录</a>
+            <a class="forget" href="javascript:">忘记密码</a>
+        </div>
+    </div>
+</body>
+</html>
