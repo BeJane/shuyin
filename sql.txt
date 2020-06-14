@@ -1,102 +1,107 @@
-use shuyin;
-CREATE TABLE user
-(
-ID VARCHAR(8) PRIMARY KEY,
-username VARCHAR(20) NOT NULL,
-password CHAR(20),
-personalsignature VARCHAR(100)
-);
-drop table book;          
-CREATE TABLE book
-(
-bookID BIGINT NOT NULL AUTO_INCREMENT,
-Introduction VARCHAR(100) NOT NULL,
-author VARCHAR(20) NOT NULL,
-bookname VARCHAR(20) NOT NULL,
- PRIMARY KEY (bookID)
-); 
-drop table chapter;
-alter table shuyin.chapter
-drop COLUMN contentofchapter;
-alter table shuyin.chapter
-ADD COLUMN  content TEXT NOT NULL;
-CREATE TABLE chapter
-(
-ID BIGINT NOT NULL AUTO_INCREMENT,
-bookID bigint,
-content VARCHAR(50) NOT NULL UNIQUE,
-cname VARCHAR(50) NOT NULL,
-primary key(ID),
-FOREIGN KEY(bookID) REFERENCES book(bookID));
-drop table audio;
-CREATE TABLE audio
-(
-ID BIGINT NOT NULL AUTO_INCREMENT,
-userID VARCHAR(8),
-chapterID BIGINT,
-FOREIGN KEY(userID) REFERENCES user(ID),
-FOREIGN KEY(chapterID) REFERENCES chapter(ID),
-content VARCHAR(50) NOT NULL UNIQUE, 
-time TIMESTAMP NOT NULL,
-primary key(ID));
-drop table ccomment;
-CREATE TABLE ccomment
-(
-ID BIGINT NOT NULL AUTO_INCREMENT,
-userID VARCHAR(8),
-chapterID BIGINT,
-FOREIGN KEY(userID) REFERENCES user(ID),
-FOREIGN KEY(chapterID) REFERENCES chapter(ID),
-content VARCHAR(100) NOT NULL,
-time TIMESTAMP NOT NULL,
-primary key(ID)
-) ;
+CREATE TABLE `user` (
+  `ID` varchar(8) NOT NULL,
+  `username` varchar(20) NOT NULL,
+  `password` char(20) DEFAULT NULL,
+  `personalsignature` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE admonistrators
-(
-ID VARCHAR(8) PRIMARY KEY,
-Username VARCHAR(20) NOT NULL,
-Password VARCHAR(20) NOT NULL
-) ;          
-drop table audiothumbsup;
-CREATE TABLE audioThumbsup
-(
-Thumbsup BIGINT NOT NULL AUTO_INCREMENT,
-userID VARCHAR(8),
-worksID BIGINT,
-FOREIGN KEY(userID) REFERENCES user(ID),
-FOREIGN KEY(worksID) REFERENCES audio(ID),
-primary key(Thumbsup)
-) ;
+CREATE TABLE `book` (
+  `bookID` bigint NOT NULL AUTO_INCREMENT,
+  `Introduction` varchar(100) NOT NULL,
+  `author` varchar(20) NOT NULL,
+  `bookname` varchar(20) NOT NULL,
+  PRIMARY KEY (`bookID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-drop table chapterthumbs_up;
-CREATE TABLE chapterThumbs_up
-(
-Thumbs_up BIGINT NOT NULL AUTO_INCREMENT,
-userID VARCHAR(8),
-chapterID BIGINT,
-FOREIGN KEY(userID) REFERENCES user(ID),
-FOREIGN KEY(chapterID) REFERENCES chapter(ID),
-primary key(Thumbs_up)
-);
-drop table feedback;
-CREATE TABLE feedback
-(
-ID BIGINT NOT NULL AUTO_INCREMENT,
-UserID VARCHAR(8),
-AudioID BIGINT,
-Content VARCHAR(100) NOT NULL,
-FOREIGN KEY(userID) REFERENCES user(ID),
-FOREIGN KEY(AudioID) REFERENCES audio(ID),
-State INT NOT NULL,
-primary key(ID)
-);
-drop table acomment;
-CREATE TABLE acomment
-(
-ID BIGINT NOT NULL AUTO_INCREMENT,
-UserID VARCHAR(8),
-AudioID BIGINT,
-FOREIGN KEY(AudioID) REFERENCES audio(ID),
-Content VARCHAR(100) NOT NULL,
-primary key(ID));
+CREATE TABLE `chapter` (
+  `ID` bigint NOT NULL AUTO_INCREMENT,
+  `bookID` bigint DEFAULT NULL,
+  `cname` varchar(50) NOT NULL,
+  `content` text NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `bookID` (`bookID`),
+  CONSTRAINT `chapter_ibfk_1` FOREIGN KEY (`bookID`) REFERENCES `book` (`bookID`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `audio` (
+  `ID` bigint NOT NULL AUTO_INCREMENT,
+  `userID` varchar(8) DEFAULT NULL,
+  `chapterID` bigint DEFAULT NULL,
+  `content` varchar(50) NOT NULL,
+  `time` timestamp NOT NULL,
+  PRIMARY KEY (`ID`),
+  UNIQUE KEY `content` (`content`),
+  KEY `userID` (`userID`),
+  KEY `chapterID` (`chapterID`),
+  CONSTRAINT `audio_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`ID`),
+  CONSTRAINT `audio_ibfk_2` FOREIGN KEY (`chapterID`) REFERENCES `chapter` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `admonistrators` (
+  `ID` varchar(8) NOT NULL,
+  `Username` varchar(20) NOT NULL,
+  `Password` varchar(20) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `acomment` (
+  `ID` bigint NOT NULL AUTO_INCREMENT,
+  `userid` varchar(8) DEFAULT NULL,
+  `AudioID` bigint DEFAULT NULL,
+  `Content` varchar(100) NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `userid` (`userid`),
+  KEY `acomment_ibfk_2` (`AudioID`),
+  CONSTRAINT `acomment_ibfk_1` FOREIGN KEY (`userid`) REFERENCES `user` (`ID`),
+  CONSTRAINT `acomment_ibfk_2` FOREIGN KEY (`AudioID`) REFERENCES `audio` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `audiothumbsup` (
+  `Thumbsup` bigint NOT NULL AUTO_INCREMENT,
+  `userID` varchar(8) DEFAULT NULL,
+  `worksID` bigint DEFAULT NULL,
+  PRIMARY KEY (`Thumbsup`),
+  KEY `userID` (`userID`),
+  KEY `audiothumbsup_ibfk_2` (`worksID`),
+  CONSTRAINT `audiothumbsup_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`ID`),
+  CONSTRAINT `audiothumbsup_ibfk_2` FOREIGN KEY (`worksID`) REFERENCES `audio` (`ID`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `ccomment` (
+  `ID` bigint NOT NULL AUTO_INCREMENT,
+  `userID` varchar(8) DEFAULT NULL,
+  `chapterID` bigint DEFAULT NULL,
+  `content` varchar(100) NOT NULL,
+  `time` timestamp NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `userID` (`userID`),
+  KEY `chapterID` (`chapterID`),
+  CONSTRAINT `ccomment_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`ID`),
+  CONSTRAINT `ccomment_ibfk_2` FOREIGN KEY (`chapterID`) REFERENCES `chapter` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `chapterthumbs_up` (
+  `Thumbs_up` bigint NOT NULL AUTO_INCREMENT,
+  `userID` varchar(8) DEFAULT NULL,
+  `chapterID` bigint DEFAULT NULL,
+  PRIMARY KEY (`Thumbs_up`),
+  KEY `userID` (`userID`),
+  KEY `chapterID` (`chapterID`),
+  CONSTRAINT `chapterthumbs_up_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `user` (`ID`),
+  CONSTRAINT `chapterthumbs_up_ibfk_2` FOREIGN KEY (`chapterID`) REFERENCES `chapter` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `feedback` (
+  `ID` bigint NOT NULL AUTO_INCREMENT,
+  `UserID` varchar(8) DEFAULT NULL,
+  `AudioID` bigint DEFAULT NULL,
+  `Content` varchar(100) NOT NULL,
+  `State` int NOT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `UserID` (`UserID`),
+  KEY `AudioID` (`AudioID`),
+  CONSTRAINT `feedback_ibfk_1` FOREIGN KEY (`UserID`) REFERENCES `user` (`ID`),
+  CONSTRAINT `feedback_ibfk_2` FOREIGN KEY (`AudioID`) REFERENCES `audio` (`ID`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
