@@ -1,5 +1,4 @@
 import os
-
 from django.contrib import messages
 from django.http import HttpResponse, StreamingHttpResponse
 # Create your views here.
@@ -10,7 +9,7 @@ from django.utils.timezone import now
 from app1.models import *
 
 CHUNK = 1024
-dir_path = 'F:\\大三下\\shuyin\\static'
+dir_path = 'E:\\1WANG的大学\\个人\\1大三下学习\\软件分析与测试\\实践\\shuyin\\static'
 
 def first(request):
     if request.method == "GET":
@@ -34,7 +33,7 @@ def chapter(request):
         state = '未点赞'
         if ChapterthumbsUp.objects.filter(chapterid=chapterId, userid=uid).exists():
             state = '已点赞'
-        audio = Audio.objects.all().order_by("id")
+        audio = Audio.objects.filter(chapterid=chapterId).order_by("id")
         return render(request, 'chapterReading.html', {'audios': audio,
                                                            'chapter': chapter,
                                                            'uid': uid, 'max':max,'state':state,
@@ -55,8 +54,8 @@ def play(request):
         state = '未点赞'
         if ChapterthumbsUp.objects.filter(chapterid=chapterId, userid=uid).exists():
             state = '已点赞'
-        audio = Audio.objects.all().order_by("id")
-        atcount = Audiothumbsup.objects.count() # 音频点赞量
+        audio = Audio.objects.filter(chapterid=chapterId).order_by("id")
+        atcount = Audiothumbsup.objects.filter(worksid=file.id).count() # 音频点赞量
         acomment = Acomment.objects.filter(audioid=file.id)
         amax = acomment.count() # 音频评论量
         astate = '未点赞'
@@ -84,8 +83,8 @@ def play(request):
         state = '未点赞'
         if ChapterthumbsUp.objects.filter(chapterid=chapterId, userid=uid).exists():
             state = '已点赞'
-        audio = Audio.objects.all().order_by("id")
-        atcount = Audiothumbsup.objects.count() # 音频点赞量
+        audio = Audio.objects.filter(chapterid=chapterId).order_by("id")
+        atcount = Audiothumbsup.objects.filter(worksid=file.id).count() # 音频点赞量
         acomment = Acomment.objects.filter(audioid=file.id)
         amax = acomment.count() # 音频评论量
         astate = '未点赞'
@@ -207,7 +206,6 @@ def login(request):
                 request.session['password'] = userInfo[i].password
                 request.session['personalsignature'] = userInfo[i].personalsignature
                 return redirect("/main")
-        messages.error(request,"用户名或密码不正确")
         return render(request, 'login.html')
     return render(request, 'login.html')
 
@@ -222,13 +220,11 @@ def adminlogin(request):
     return render(request, 'adminlogin.html')
 
 def showAll(request):
-    # 测试向网页发送字符串
-    # return HttpResponse("Hello world");
-    # 查询所有数据库学生表的信息
-    feedbacks = Feedback.objects.all()
+    feedbacks = Feedback.objects.filter(state=0)
     count = feedbacks.__len__()
-    # 返回网页地址并携带学生数据
+
     return render(request, "feedback.html", context={"feedbacks": feedbacks, "count": count})
+
 def addfeedback(request):
     if request.method == "POST":
         content=request.POST.get('content')
@@ -243,12 +239,13 @@ def addfeedback(request):
         return redirect('/play?cid=' + str(cid) + '&uid=' + uid+'&audioid='+aid)
 
 def deleteAudio(request):
-    # 获取需要删除的学生对象的sid
-    delete_sid=request.GET['delete_sid']
+    # 获取需要删除的对象的sid
+    aid=request.GET['aid']
     # 先查找单个对象，然后进行删除
-    Audio.objects.get(id=delete_sid).delete()
+    Audio.objects.get(id=aid).delete()
     # 删除之后，重定向到首页
-    return redirect("feedback.html")
+    return redirect('/personal')
+
 
 def register(request):
     if request.method == "POST":
@@ -269,6 +266,7 @@ def register(request):
         return redirect("/login")
     return render(request, "register.html")
 
+
 def main(request):
 
     if request.method == "POST":
@@ -277,6 +275,7 @@ def main(request):
         books = Book.objects.all()
         for booki in range(len(books)):
             if(search_book == books[booki].bookname):
+                request.session['bid'] = books[booki].bookid
                 request.session['search_book'] = books[booki].bookname
                 request.session['search_author'] = books[booki].author
                 request.session['search_introduction'] = books[booki].introduction
@@ -298,10 +297,12 @@ def main(request):
         audios_thumbup_num = []
         chapter_sort = []
         book_sort = []
-        print(books)
+
+        book_sort1 = []
+        book_sort2= []
         # 读出每本书的书名
-        #for i in range(len(books)):
-        #    booksname.append(books[i].bookname)
+        for i in range(len(books)):
+            booksname.append(books[i].bookname)
         # 计算每本书章节内容的总点赞数
         for booki in range(len(books)):
             book_thumbup_num = 0
@@ -323,8 +324,13 @@ def main(request):
                                     audio_thumbup_num += 1
                     audios_thumbup_num.append(audio_thumbup_num)
                     book_sort.append(books[booki].bookname)
+
+                    book_sort1.append(books[booki].author)
+                    book_sort2.append(books[booki].introduction)
                     chapter_sort.append(chapters[chapteri].cname)
                     chapterid.append(chapters[chapteri].id)
+
+
             # 将该书的书名和点赞数存入数组
             books_thumbup_num.append(book_thumbup_num)
 
@@ -335,10 +341,9 @@ def main(request):
             booksintroduction.append(books[booksi].introduction)
             booksid.append(books[booksi].bookid)
 
-        print(books_thumbup_num, booksname, booksauthor, booksintroduction, booksid)
         booksSort = list(zip(books_thumbup_num, booksname, booksauthor, booksintroduction, booksid))
-        audiosSort = list(zip(audios_thumbup_num, book_sort, chapter_sort, booksauthor, booksintroduction,chapterid))
-        print(booksSort)
+        audiosSort = list(zip(audios_thumbup_num, book_sort, chapter_sort, book_sort1, book_sort2,chapterid))
+        print(audios_thumbup_num, book_sort, chapter_sort, booksauthor, booksintroduction,chapterid)
         booksSort.sort(key=lambda x: x[0], reverse=True)
         audiosSort.sort(key=lambda x: x[0], reverse=True)
 
@@ -347,6 +352,7 @@ def main(request):
         uid = request.session['userid']
         return render(request, "main.html", {'booksSort': booksSort, 'audiosSort': audiosSort,
                                             'uid':uid,'username': username, 'personalsignature': personalsignature})
+
 
 
 def search(request):
@@ -372,50 +378,18 @@ def personal(request):
                 users[useri].username = request.session['username']
                 users[useri].personalsignature = request.session['personalsignature']
                 users[useri].save()
-    print('1234')
-    username = request.session['username']
+
     userid = request.session['userid']
-    personalsignature = request.session['personalsignature']
+    publish = Audio.objects.filter(userid=userid)
+    user = User.objects.get(id=userid)
+    chapterThumb = ChapterthumbsUp.objects.filter(userid=userid)
+    audioThumb = Audiothumbsup.objects.filter(userid=userid)
+    return render(request, "personal.html", {'user':user,
+                                                 'publish':publish,
+                                             'chapter':chapterThumb,
+                                             'audio':audioThumb})
 
-    books = Book.objects.all()
-    chapters =Chapter.objects.all()
-    chapterthumbs_ups = ChapterthumbsUp.objects.all()
-    audios =Audio.objects.all()
-    audiothumbs_ups = Audiothumbsup.objects.all()
 
-    chaptersthumbup = []
-    bookchapters = []
-    audiosthumbup = []
-    bookaudios = []
-    publishaudios = []
-    publishbooks = []
-    # 计算每本书章节内容的总点赞数
-    for booki in range(len(books)):
-        # 寻找在该书中的章节
-        for chapteri in range(len(chapters)):
-            if (chapters[chapteri].bookid.bookid == books[booki].bookid):
-                    # 寻找每个章节的点赞，若是该章节的点赞，则对该书的点赞数加1
-                for chapterthumbs_upi in range(len(chapterthumbs_ups)):
-                    if (chapterthumbs_ups[chapterthumbs_upi].chapterid.id == chapters[chapteri].id and chapterthumbs_ups[chapterthumbs_upi].userid.id == userid):
-                            chaptersthumbup.append(books[booki].bookname)
-                            bookchapters.append(chapters[chapteri].cname)
-                    # 寻找该章节的配音作品
-                for audioi in range(len(audios)):
-                    if (audios[audioi].chapterid.id == chapters[chapteri].id):
-                        if(audios[audioi].userid.id == userid):
-                                publishaudios.append(chapters[chapteri].cname)
-                                publishbooks.append(books[booki].bookname)
-                            # 寻找该配音作品的点赞数
-                    for audiothumbs_upi in range(len(audiothumbs_ups)):
-                        if (audiothumbs_ups[audiothumbs_upi].worksid.id == audios[audioi].id and audiothumbs_ups[audiothumbs_upi].userid.id == userid):
-                                        audiosthumbup.append(books[booki].bookname)
-                                        bookaudios.append(chapters[chapteri].cname)
-
-    chapter = list(zip(chaptersthumbup,bookchapters))
-    audio = list(zip(audiosthumbup,bookaudios))
-    publish = list(zip(publishbooks,publishaudios))
-    return render(request, "personal.html", {'username':username,'personalsignature':personalsignature,
-                                                 'publish':publish,'chapter':chapter,'audio':audio})
 
 
 def book(request):
@@ -433,4 +407,19 @@ def book(request):
                                                    'bookname':bookname,
                                                    'bookintroduction':bookintroduction,
                                                    'chapter': chapter,
-                                                   'uid':userid})
+                                                   'uid':userid,
+                                                    'book':book1})
+
+def operation(request):
+    # 获取需要删除的对象的sid
+    aid=request.GET['aid']
+    fid=request.GET['fid']
+    c=request.GET['c']
+    if c == '1':
+        # 先查找单个对象，然后进行删除
+        Audio.objects.filter(id=aid).delete()
+    else:
+        Feedback.objects.filter(id=fid).update(state=1)
+
+    # 删除之后，重定向到首页
+    return redirect('/feedback')

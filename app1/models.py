@@ -8,17 +8,16 @@
 from django.db import models
 
 
-
 class Acomment(models.Model):
     id = models.BigAutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userid', blank=True, null=True)
-    audioid = models.ForeignKey('Audio', models.DO_NOTHING, db_column='AudioID', blank=True, null=True)  # Field name made lower
-
+    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercase.
+    audioid = models.ForeignKey('Audio', models.DO_NOTHING, db_column='AudioID', blank=True, null=True)  # Field name made lowercase.
     content = models.CharField(db_column='Content', max_length=100)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'acomment'
+
 
 class Admonistrators(models.Model):
     id = models.CharField(db_column='ID', primary_key=True, max_length=8)  # Field name made lowercase.
@@ -31,11 +30,9 @@ class Admonistrators(models.Model):
 
 
 class Audio(models.Model):
-    id = models.AutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercas
-
-    chapterid = models.ForeignKey('Chapter', models.DO_NOTHING, db_column='chapterID', blank=True, null=True)  # Field name made
-
+    id = models.BigAutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
+    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercase.
+    chapterid = models.ForeignKey('Chapter', models.DO_NOTHING, db_column='chapterID', blank=True, null=True)  # Field name made lowercase.
     content = models.CharField(unique=True, max_length=50)
     time = models.DateTimeField()
 
@@ -46,10 +43,8 @@ class Audio(models.Model):
 
 class Audiothumbsup(models.Model):
     thumbsup = models.BigAutoField(db_column='Thumbsup', primary_key=True)  # Field name made lowercase.
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercas
-
-    worksid = models.ForeignKey(Audio, models.DO_NOTHING, db_column='worksID', blank=True, null=True)  # Field name made lowerca
-
+    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercase.
+    worksid = models.ForeignKey(Audio, models.DO_NOTHING, db_column='worksID', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -69,10 +64,8 @@ class Book(models.Model):
 
 class Ccomment(models.Model):
     id = models.BigAutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercas
-
-    chapterid = models.ForeignKey('Chapter', models.DO_NOTHING, db_column='chapterID', blank=True, null=True)  # Field name made
-
+    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercase.
+    chapterid = models.ForeignKey('Chapter', models.DO_NOTHING, db_column='chapterID', blank=True, null=True)  # Field name made lowercase.
     content = models.CharField(max_length=100)
     time = models.DateTimeField()
 
@@ -84,23 +77,18 @@ class Ccomment(models.Model):
 class Chapter(models.Model):
     id = models.BigAutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
     bookid = models.ForeignKey(Book, models.DO_NOTHING, db_column='bookID', blank=True, null=True)  # Field name made lowercase.
-
+    content = models.CharField(unique=True, max_length=50)
     cname = models.CharField(max_length=50)
-    content = models.TextField()
 
     class Meta:
         managed = False
         db_table = 'chapter'
 
 
-
-
-
 class ChapterthumbsUp(models.Model):
     thumbs_up = models.BigAutoField(db_column='Thumbs_up', primary_key=True)  # Field name made lowercase.
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercas
-
-    chapterid = models.ForeignKey(Chapter, models.DO_NOTHING, db_column='chapterID', blank=True, null=True)  # Field name made l
+    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='userID', blank=True, null=True)  # Field name made lowercase.
+    chapterid = models.ForeignKey(Chapter, models.DO_NOTHING, db_column='chapterID', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
@@ -109,10 +97,8 @@ class ChapterthumbsUp(models.Model):
 
 class Feedback(models.Model):
     id = models.BigAutoField(db_column='ID', primary_key=True)  # Field name made lowercase.
-    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID', blank=True, null=True)  # Field name made lowercas
-
-    audioid = models.ForeignKey(Audio, models.DO_NOTHING, db_column='AudioID', blank=True, null=True)  # Field name made lowerca
-
+    userid = models.ForeignKey('User', models.DO_NOTHING, db_column='UserID', blank=True, null=True)  # Field name made lowercase.
+    audioid = models.ForeignKey(Audio, models.DO_NOTHING, db_column='AudioID', blank=True, null=True)  # Field name made lowercase.
     content = models.CharField(db_column='Content', max_length=100)  # Field name made lowercase.
     state = models.IntegerField(db_column='State')  # Field name made lowercase.
 
