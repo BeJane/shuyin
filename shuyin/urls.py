@@ -37,4 +37,5 @@ urlpatterns = [
     path('addfeedback',views.addfeedback),
     path('feedback', views.showAll),
     path('deleteAudio', views.deleteAudio),
+    path('operation',views.operation),
 ]
