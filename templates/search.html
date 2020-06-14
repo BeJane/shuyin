@@ -8,24 +8,14 @@
 </head>
 <body>
 <div class="mainall" style="float:left;">
-    <div id="container" name="headertop" style="height: 120px;">
-        <div id="pic" style="height:100px;width:400px;float:left;">
-            <img src="{%  static 'img/shuyin.png' %}" width=400px height=200px />
-        </div>
-        <br>
-        <div id="content" style="height:100px;width:450px;float:left;">
-            <form method="post" action="">
-                {% csrf_token %}
-                <input type="text" class="search" name="search" value="" size="50" style="height:50px;float:left;" placeholder="搜索海量图书" />
-                <button type="submit" ><img src="{%  static 'img/search.jpg' %}" width=50px height=50px /></button>
-            </form>
-        </div>
-        <div>
-            <a href="personal"><img src="{%  static 'img/login.png' %}" width=80px height=80px style="float: left;position: absolute;margin-left: 100px;margin-top: 20px;"> </a>
-        </div>
+    <div style="float: right;margin-left: 200px">
+        <a href="main"><h1>返回</h1></a>
+    </div>
+    <div  style="float: right;margin-left: 1000px">
+        <a href="personal"><img src="{%  static 'img/login.png' %}"> </a>
     </div>
 
-    <div id="container" name="content" style="height: 600px ">
+    <div id="container" name="content" style="height: 600px ;margin-top: 100px">
         <table border="2" style="width: 500px;float: left;position: absolute;margin-left: 350px;margin-top: 20px;">
             <tr>
                 <th>书名</th>
@@ -33,7 +23,7 @@
                 <th>简介</th>
             </tr>
                 <tr style="height: 50px">
-                    <td><a href="login.html">{{ request.session.search_book }}</a></td>
+                    <td><a href="book?bid={{ request.session.bid }}">{{ request.session.search_book }}</a></td>
                     <td>{{ request.session.search_author }}</td>
                     <td>{{ request.session.search_introduction }}</td>
                 </tr>

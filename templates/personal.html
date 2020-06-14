@@ -15,9 +15,11 @@
     <div class="content" style="float: left">
         <form action="personal" method="post">
             {% csrf_token %}
-            <div>用 户 名 : <input type="text" name="username" value="{{ username }}"  size="20" style="height:20px;" /></div>
-            <div>个性签名: <input type="text" name="personalsignature" value="{{ personalsignature }}"  size="20" style="height:20px;" /></div>
+            <div>用 户 名 : <input type="text" name="username" value="{{ user.username}}"  size="20" style="height:20px;" /></div>
+            <div>个性签名: <input type="text" name="personalsignature" value="{{ user.personalsignature }}"  size="20" style="height:20px;" /></div>
 
+           <button id="submit">确定修改</button>
+        <br>
             <div>已发布配音作品: </div>
                 <table border="2" style="width: 500px">
                         <tr>
@@ -26,9 +28,11 @@
                         </tr>
                     {% for p in publish %}
                     <tr style="height: 30px">
-                        <td>{{ p.0 }}</td>
-                        <td>{{ p.1 }}</td>
+                        <td>{{p.chapterid.bookid.bookname}}</td>
+                        <td>{{ p.chapterid.cname }}</td>
+                    <td><a href="deleteAudio?aid={{ p.id }}">删除</a> </td>
                     </tr>
+
                     {% endfor %}
                 </table>
             <div>点赞的阅读作品:</div>
@@ -40,8 +44,8 @@
                         </tr>
                     {% for c in chapter %}
                     <tr style="height: 30px">
-                        <td>{{ c.0 }}</td>
-                        <td>{{ c.1 }}</td>
+                        <td>{{ c.chapterid.bookid.bookname}}</td>
+                        <td>{{ c.chapterid.cname }}</td>
                     </tr>
                     {% endfor %}
                 </table>
@@ -55,18 +59,19 @@
                         </tr>
                     {% for a in audio %}
                     <tr style="height: 30px">
-                        <td>{{ a.0 }}</td>
-                        <td>{{ a.1 }}</td>
+                        <td>{{ a.worksid.chapterid.bookid.bookname }}</td>
+                        <td>{{ a.worksid.chapterid.cname }}</td>
                     </tr>
                     {% endfor %}
                     </table>
             </div>
 
-           <button id="submit">确定修改</button>
 
     </form>
-            <div><a href="login">退出登陆</a></div>
-        </div>
+        <div><a href="login">退出登录</a></div>
+    </div>
+    <div style="float: right;margin-right: 500px">
+        <a href="main"><h1>返回</h1></a>
     </div>
 </div>
 </body>

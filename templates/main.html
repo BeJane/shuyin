@@ -7,69 +7,74 @@
     <link rel="stylesheet" type="text/css" href="{%  static 'css/main.css' %}">
 </head>
 <body>
-<div class="mainall" style="float:left;">
-    <div id="container" name="headertop" style="height: 120px;">
-        <div id="pic" style="height:100px;width:400px;float:left;">
-            <img src="{%  static 'img/shuyin.png' %}" width=400px height=200px />
-        </div>
-        <div id="content" style="height:100px;width:450px;float:left;">
-            <form method="post" action="">
+<div id="container" name="headertop" style="height: 80px;">
+    <div style="float: left;width:600px ">
+        <img src="{%  static 'img/xiaohui.png' %}" width=600px height=150px />
+    </div>
+    <div id="content" style="height:100px;width:450px;margin-top: 160px;float: left;margin-left: 0">
+        <form method="post" action="">
 
             {% csrf_token %}
-                <input type="text" class="search" name="search" value="" size="50" style="height:50px;float:left;" placeholder="搜索海量图书" />
-                <button type="submit" ><img src="{%  static 'img/search.jpg' %}" width=50px height=50px /></button>
-            </form>
-        </div>
-<a href="personal"><img src="{%  static 'img/login.png' %}" width=80px height=80px> </a>
+            <input type="text"align="center" class="search" name="search" value="" size="50" style="height:50px;float:left;margin-bottom: 20px" placeholder="搜索海量图书" />
+            <button type="submit" ><img src="{%  static 'img/search.jpg' %}" width=50px height=50px /></button>
+        </form>
 
-        </div>
     </div>
+    <div style="float: left;margin-top: 50px;margin-left: 500px">
+        <a href="personal"><img src="{%  static 'img/login.png' %}" width=80px height=80px > </a>
+        <h1 style="color: #cccccc">个人中心</h1>
+    </div>
+    <!--
+    <div  style="float: left;margin-left: 100px" >
+        <img src="{%  static 'img/shuyin.png' %}" width=200px height=150px  />
 
-    <div id="container" name="content" style="height: 600px ">
+    </div>
+    -->
+</div>
 
-        <div id="newbook" style="height: 600px;width: 1400px;float:left;">
-            <div class="dowebok1" style="width: 700px;height: 600px;float:left;">
-                <div style="color:#FFF">
-                最热书籍排行榜
-                </div>
-                <div>
-                    <table border="2" style="width: 500px">
-                        <tr>
-                            <th>书名</th>
-                            <th>作者</th>
-                            <th>书籍简介</th>
-                        </tr>
+<div id="container" name="content" style="height: 600px ">
+    <div id="newbook" style="height: 400px;float:left;">
+        <div class="dowebok1" style="width: 600px;height: 400px;float:left;margin-left: 200px">
+            <div style="color:#FFF">
+                <h1 style="margin-bottom:0;color: black" align="center">最热书籍排行榜</h1>
+            </div>
+            <div>
+                <table border="2" style="width: 600px; text-align:center;table-layout: fixed">
+                    <tr>
+                        <th>书名</th>
+                        <th>作者</th>
+                        <th>书籍简介</th>
+                    </tr>
                     {% for book in booksSort %}
-                    <tr style="height: 50px">
-                        <td><a href="book?bid={{ book.4 }}">{{ book.1 }}</a></td>
-                        <td>{{ book.2 }}</td>
-                        <td>{{ book.3 }}</td>
-                    </tr>
-                    {% endfor %}
-                    </table>
-                </div>
-            </div>
-            <div class="dowebok2" style="width: 700px;height: 600px;float:left;">
-                <div style="color:#FFF">
-                最热配音章节排行榜
-                </div>
-                    <table border="2" style="width: 500px">
-                        <tr>
-                            <th>书名</th>
-                            <th>章节名</th>
-                            <th>作者</th>
-                            <th>书籍简介</th>
+                        <tr style="height: 120px">
+                            <th><a href="book?bid={{ book.4 }}">{{ book.1 }}</a></th>
+                            <th>{{ book.2 }}</th>
+                            <th>{{ book.3 }}</th>
                         </tr>
-                    {% for book in audiosSort %}
-                    <tr style="height: 50px">
-                        <td>{ book.1 }}</td>
-                        <td><a href="chapter?chapterId={{ book.5 }}&uid={{ uid }}&uid={{ uid }}">{{ book.2 }}</a></td>
-                        <td>{{ book.3 }}</td>
-                        <td>{{ book.4 }}</td>
-                    </tr>
                     {% endfor %}
-                    </table>
+                </table>
             </div>
+        </div>
+        <div class="dowebok2" style="width: 800px;height: 400px;float:left;margin-left: 100px">
+            <div style="color:#FFF">
+                <h1 style="margin-bottom:0;color: black" align="center">    最热配音章节排行榜</h1>
+            </div>
+            <table border="2" style="width: 800px;text-align:center;table-layout: fixed">
+                <tr>
+                    <th>书名</th>
+                    <th>章节名</th>
+                    <th>作者</th>
+                    <th>书籍简介</th>
+                </tr>
+                {% for book in audiosSort %}
+                    <tr style="height: 100px">
+                        <th>{{ book.1 }}</th>
+                        <th><a href="chapter?chapterId={{ book.5 }}&uid={{ uid }}&uid={{ uid }}">{{ book.2 }}</a></th>
+                        <th>{{ book.3 }}</th>
+                        <th>{{ book.4 }}</th>
+                    </tr>
+                {% endfor %}
+            </table>
         </div>
     </div>
 </div>
